@@ -55,13 +55,13 @@ public class Worker {
 			
 			//check to make the next step or turn around
 			if(speed > 0) {
-				if((speed > 0) && (currentPosition + speed/2) >= block) {
+				if((currentPosition + speed/2) >= block) {
 					speed = INITIAL_SPEED;
 					
 					count += 2;
 					commands += COMMAND_ROTATE + COMMAND_ROTATE;
 					path += "->" + currentPosition + "->" + currentPosition;
-				}else if ((currentPosition + speed/2) < block) {
+				}else {
 					currentPosition += speed;
 					
 					commands += COMMAND_AHEAD;
@@ -75,7 +75,7 @@ public class Worker {
 					count += 2;
 					commands += COMMAND_ROTATE + COMMAND_ROTATE;
 					path += "->" + currentPosition + "->" + currentPosition;
-				}else if ((currentPosition + speed/2) > block) {
+				}else {
 					currentPosition += speed;
 					
 					commands += COMMAND_AHEAD;
