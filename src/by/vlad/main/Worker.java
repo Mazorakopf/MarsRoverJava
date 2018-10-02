@@ -8,84 +8,79 @@ public class Worker {
 	private static final String COMMAND_ROTATE = "R";
 	private static final int INITIAL_POSITION = 0;
 	
+	private static String commands;
+	private static String path;
+	private static int currentPosition;
+	private static int speed;
+	private static int count;
+	
 	public static void calcBestPath(int block) {
-		String commands = "";
-		String path = "" + INITIAL_POSITION;
-		int currentPosition = INITIAL_POSITION;
-		int speed = INITIAL_SPEED;
-		int count = 0;
-
+		
+		commands = "";
+		path = "" + INITIAL_POSITION;
+		currentPosition = INITIAL_POSITION;
+		speed = INITIAL_SPEED;
+		count = 0;
+		
 		while (currentPosition != block) {
 			
 			//turn around if the block is in the other side
 			if((block < currentPosition) && (speed > 0)) {
-				speed = SPEED_AFTER_ROTATE;
-				
-				commands += COMMAND_ROTATE;
-				count++;
-				path += "->" + currentPosition;
+				commandR();
 			} else if((block > currentPosition) && (speed < 0)){
-				speed = INITIAL_SPEED;
-				
-				commands += COMMAND_ROTATE;
-				count++;
-				path += "->" + currentPosition;
+				commandR();
 			}
 			
 			//go until the nextPosition is no more than block
 			while(((speed > 0) && ((currentPosition + speed ) <  block)) || ((speed < 0) && ((currentPosition + speed) >  block))) {
-				currentPosition += speed;
-				speed *= 2;
-				
-				commands += COMMAND_AHEAD;
-				count++;
-				path += "->" + currentPosition;
+				commandA();
 			}
 			
 			//if nextPosition equals block take a step and break
 			if((currentPosition + speed) == block) {
-				currentPosition += speed;
-				speed *=2;
-				
-				commands += COMMAND_AHEAD;
-				count++;
-				path += "->" + currentPosition;
+				commandA();
 				break;
 			}
 			
 			//check to make the next step or turn around
 			if(speed > 0) {
 				if((currentPosition + speed/2) >= block) {
-					speed = INITIAL_SPEED;
-					
-					count += 2;
-					commands += COMMAND_ROTATE + COMMAND_ROTATE;
-					path += "->" + currentPosition + "->" + currentPosition;
+					commandR();
+					commandR();
 				}else {
-					currentPosition += speed;
-					
-					commands += COMMAND_AHEAD;
-					count++;
-					path += "->" + currentPosition;			
+					commandA();			
 				}
 			}else {
 				if((currentPosition + speed/2) <= block) {
-					speed = SPEED_AFTER_ROTATE;
-					
-					count += 2;
-					commands += COMMAND_ROTATE + COMMAND_ROTATE;
-					path += "->" + currentPosition + "->" + currentPosition;
+					commandR();
+					commandR();
 				}else {
-					currentPosition += speed;
-					
-					commands += COMMAND_AHEAD;
-					count++;
-					path += "->" + currentPosition;
+					commandA();
 				}
 			}
 		}
 		System.out.println("========================================");
 		System.out.println("Block: " + block + "\n" + "Num of steps: " + count + "\n" + "List of commands: " + commands
 				+ "\n" + "Way: " + path);
+	}
+	
+	private static void commandA() {
+		currentPosition += speed;
+		speed *= 2;
+		
+		commands += COMMAND_AHEAD;
+		count++;
+		path += "->" + currentPosition;
+	}
+	
+	private static void commandR() {
+		if(speed > 0) {
+			speed = SPEED_AFTER_ROTATE;
+		}else {
+			speed = INITIAL_SPEED;
+		}
+		commands += COMMAND_ROTATE;
+		count++;
+		path += "->" + currentPosition;
 	}
 }
