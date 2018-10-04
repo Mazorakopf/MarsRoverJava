@@ -42,16 +42,31 @@ public class Worker {
 				break;
 			}
 			
+			if(((currentPosition  + speed / 2) == block) && (speed == 4 || speed == -4)) {
+				blockOfcommandRAR_A(block);
+				break;
+			}
+			
+			if(((block - currentPosition) % 2 == 0) && ((currentPosition + speed) > block) && ((currentPosition + speed / 2) > block)
+					&& (((block -currentPosition) / 2) % 2 != 0)) {
+				blockOfcommandRAR_A(block);
+				break;
+			} else if(((block - currentPosition) % 2 == 0) && ((currentPosition + speed) < block) && ((currentPosition + speed / 2) < block)
+					&& (((block -currentPosition) / 2) % 2 != 0)) {
+				blockOfcommandRAR_A(block);
+				break;
+			}
+			
 			//check to make the next step or turn around
 			if(speed > 0) {
-				if((currentPosition + speed/2) >= block) {
+				if((currentPosition + speed / 2) > block) {
 					commandR();
 					commandR();
 				}else {
 					commandA();			
 				}
 			}else {
-				if((currentPosition + speed/2) <= block) {
+				if((currentPosition + speed / 2) < block) {
 					commandR();
 					commandR();
 				}else {
@@ -82,5 +97,15 @@ public class Worker {
 		commands += COMMAND_ROTATE;
 		count++;
 		path += "->" + currentPosition;
+	}
+	
+	private static void blockOfcommandRAR_A(int block){
+		commandR();
+		commandA();
+		commandR();
+		while((currentPosition + speed ) !=  block) {
+			commandA();
+		}
+		commandA();
 	}
 }
